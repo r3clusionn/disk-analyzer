@@ -2,7 +2,7 @@
 //! are tested without a terminal; `run_terminal` is a thin crossterm loop around them, and
 //! `run_script` replays a list of key names and returns the final screen.
 
-use crate::render::{bar, human, label, thousands};
+use crate::render::{bar, files_label, human, label, thousands};
 use crate::tree::{Kind, Node, SortBy};
 use std::io::{self, Write};
 
@@ -156,7 +156,7 @@ impl Browser {
                 c.size as f64 * 100.0 / total,
                 bar(c.size as f64 / total, 10, self.ascii),
                 label(c),
-                if c.kind == Kind::Dir { format!("  ({} files)", thousands(c.files)) } else { String::new() }
+                if c.kind == Kind::Dir { format!("  ({})", files_label(c.files)) } else { String::new() }
             )));
         }
         while lines.len() < height.saturating_sub(1) {

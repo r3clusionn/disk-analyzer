@@ -43,6 +43,11 @@ pub fn thousands(n: u64) -> String {
     out
 }
 
+/// `1 file`, `2,048 files`.
+pub fn files_label(n: u64) -> String {
+    if n == 1 { "1 file".into() } else { format!("{} files", thousands(n)) }
+}
+
 /// A bar `width` cells wide filled to `frac`, in eighths when Unicode is allowed.
 pub fn bar(frac: f64, width: usize, ascii: bool) -> String {
     let frac = frac.clamp(0.0, 1.0);
@@ -82,7 +87,7 @@ pub fn label(n: &Node) -> String {
 
 pub fn render_tree(root: &Node, view: &View) -> String {
     let mut out = String::new();
-    let _ = writeln!(out, "{:>10}  {}{}", human(root.size), label(root), if root.kind == Kind::Dir { format!("  ({} files)", thousands(root.files)) } else { String::new() });
+    let _ = writeln!(out, "{:>10}  {}{}", human(root.size), label(root), if root.kind == Kind::Dir { format!("  ({})", files_label(root.files)) } else { String::new() });
     node_lines(root, view, 1, &mut out);
     out
 }
@@ -111,7 +116,7 @@ fn node_lines(parent: &Node, view: &View, level: usize, out: &mut String) {
             bar(c.size as f64 / total, 12, view.ascii),
             "  ".repeat(level - 1),
             label(c),
-            if c.kind == Kind::Dir { format!("  ({} files)", thousands(c.files)) } else { String::new() }
+            if c.kind == Kind::Dir { format!("  ({})", files_label(c.files)) } else { String::new() }
         );
         node_lines(c, view, level + 1, out);
     }
@@ -141,6 +146,7 @@ mod tests {
         assert_eq!(human(1536), "1.5 KiB");
         assert_eq!(human(5 * 1024 * 1024 * 1024), "5.0 GiB");
         assert_eq!(thousands(1234567), "1,234,567");
+        assert_eq!((files_label(1).as_str(), files_label(2).as_str()), ("1 file", "2 files"));
     }
 
     #[test]

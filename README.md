@@ -4,6 +4,8 @@
 
 **Status:** v0.1.0, working on Windows. The Linux and macOS code paths compile but have not been run.
 
+![dux showing a two-level size tree of the portfolio folder with percentages, bars, the five largest files and the hard link count](docs/images/tree.png)
+
 ## Features
 
 - Parallel scan: each directory is read on one thread and its subdirectories go to a rayon pool; results are identical for any thread count.
@@ -64,6 +66,8 @@ scanned 1,584 files in 0.01 s
 | `-b`, `--browse` | Interactive browser. |
 | `--keys "enter,down,s"` | Replay keys without a terminal and print the final screen. |
 | `--json`, `--ascii`, `-j N` | JSON output, plain bars, thread count. |
+
+![The interactive browser inside one project folder, sorted by size, with the cursor on the target directory](docs/images/browse.png)
 
 ## How it works
 
